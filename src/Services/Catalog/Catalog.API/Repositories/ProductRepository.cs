@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using Catalog.API.Data;
+﻿using Catalog.API.Data;
 using Catalog.API.Entities;
 using MongoDB.Driver;
 
@@ -29,7 +28,9 @@ public class ProductRepository : IProductRepository
 
     public async Task<IEnumerable<Product>> GetProductByCategoryNameAsync(string categoryName)
     {
-        var filter = Builders<Product>.Filter.ElemMatch(p => p.Category, categoryName);
+        //var filter = Builders<Product>.Filter.Eq(p => p.Category, categoryName);
+        //var filter = Builders<Product>.Filter.Regex(p => p.Category, new BsonRegularExpression(categoryName, "i"));
+        var filter = Builders<Product>.Filter.Where(p => p.Category.ToLower() == categoryName.ToLower());
         var product = await _context.Products.Find(filter).ToListAsync();
         return product;
     }

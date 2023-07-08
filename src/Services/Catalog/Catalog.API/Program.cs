@@ -1,6 +1,6 @@
 using Catalog.API.Data;
 using Catalog.API.Repositories;
-using Microsoft.OpenApi.Models;
+
 
 namespace Catalog.API;
 
@@ -18,20 +18,20 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         //builder.Services.AddSwaggerGen();
-        builder.Services.AddSwaggerGen(
-            c => c.SwaggerDoc("v1", new OpenApiInfo
+        builder.Services.AddSwaggerDocument(c =>
             {
-                Title = "CatalogAPI",
-                Version = "v1",
-                Description = "Practicig Microservices",
-            })
-            );
+                c.Title = "CatalogAPI";
+                c.Version = "v1";
+                c.Description = "Practicig Microservices";
+            });
         var app = builder.Build();
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            //app.UseSwagger();
+            //app.UseSwaggerUI();
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
         }
 
         app.UseAuthorization();
