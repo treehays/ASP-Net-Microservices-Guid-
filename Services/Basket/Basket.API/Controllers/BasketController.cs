@@ -1,6 +1,5 @@
 ﻿using Basket.API.Entities;
 using Basket.API.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Basket.API.Controllers;
@@ -15,8 +14,17 @@ public class BasketController : ControllerBase
         _basketRepository = basketRepository;
     }
 
-    [HttpGet("[action]/{userName}", Name ="GetBasket")]
-    [ProducesResponseType(typeof(ShoppingCart), 200)] 
+    [HttpGet("[action]/{userName}", Name = "GetAllBasket")]
+    [ProducesResponseType(typeof(ShoppingCart), 200)]
+    public async Task<ActionResult<ShoppingCart>> GetAllBasket()
+    {
+        var basket = await _basketRepository.GetAllBasketAsync();
+        return Ok(basket);
+    }
+
+
+    [HttpGet("[action]/{userName}", Name = "GetBasket")]
+    [ProducesResponseType(typeof(ShoppingCart), 200)]
     public async Task<ActionResult<ShoppingCart>> GetBasket(string userName)
     {
         var basket = await _basketRepository.GetBasketAsync(userName);
@@ -30,7 +38,7 @@ public class BasketController : ControllerBase
         var basket = await _basketRepository.UpdateBasketAsync(shoppingCart);
         return Ok(shoppingCart);
     }
-    [HttpDelete("[action]/{userName}", Name ="DeleteBasket")]
+    [HttpDelete("[action]/{userName}", Name = "DeleteBasket")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     public async Task<ActionResult> DeleteBasket(string userName)
     {

@@ -18,6 +18,16 @@ public class BasketRepository : IBasketRepository
         await _distributedCache.RemoveAsync(userName);
     }
 
+    public async Task<List<ShoppingCart>> GetAllBasketAsync()
+    {
+        var basket = await _distributedCache.GetStringAsync("*");
+        if (string.IsNullOrWhiteSpace(basket))
+        {
+            return null;
+        }
+        return JsonConvert.DeserializeObject<List<ShoppingCart>>(basket);
+    }
+
     public async Task<ShoppingCart> GetBasketAsync(string userName)
     {
         var basket = await _distributedCache.GetStringAsync(userName);
